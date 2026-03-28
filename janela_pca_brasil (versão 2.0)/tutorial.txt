@@ -1,0 +1,23 @@
+- melhorias janela pca:
+	- habilitar configuração para plotar o mês inteiro (exemplo, 1:31)
+	- mexer no código da função function PlotarimagemButtonPushed(app, event) para plotar o brasil
+		|-> tem que deixar o programa escalável para mais localizações, tipo brasil e argentina, então o trecho do names_master precisa sumir e vai entrar no lugar o arquivo estacoes_coords.txt
+		|-> o pedaço Coordenadas originais (coords = ...) da função calcularPCAApp.m tem que chamar o arquivo estacoes_coords.txt (pq depois a gente vai ter q colocar as coordenadas da argentina também, então é melhor ter todas as coordenadas com o nome das estações em um lugar só)
+		|-> o trecho do botão function PlotarimagemButtonPushed(app, event) da janela precisa entrar em um if ou coisa do gênero no arquivo calcularPCAApp.m
+	    % Contorno do Brasil
+            try
+                brasil = shaperead('BR_UF_2019.shp', 'UseGeoCoords', true);
+                for k = 1:length(brasil)
+                    plot(ax, brasil(k).Lon, brasil(k).Lat, 'k', 'LineWidth', 1.5);
+                end
+            catch
+                warning('Shapefile não encontrado.');
+            end
+        
+            xlabel(ax,'Longitude'); ylabel(ax,'Latitude');
+            title(ax,['Padrão Espacial Interativo - EOF ', num2str(app.PCAEditField.Value)]);
+            axis(ax,'equal'); xlim(ax,[-67 -36]); ylim(ax,[-30 3]); % isso aqui só vale para o brasil
+            hold(ax,'off');
+
+	Por exemplo: cria um drop down com só dois valores, brasil e argentina, e no código que calcula a pca vc coloca um if, se o usuário escolher brasil na janela, a pca usa esse código de cima, se n, vai usar o código da argentina
+
