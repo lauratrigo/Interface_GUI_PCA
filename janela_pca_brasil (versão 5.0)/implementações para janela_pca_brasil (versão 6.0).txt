@@ -1,0 +1,35 @@
+Implementações:
+	- precisa criar um botão para excluir um dia caso tenha sido adicionado por engano
+	- colocar o mapa .shp da argentina, uruguai e chile
+	- usar um índice para separar as estações do arquivo estacoes_coords de quem é o brasil, para quem é da argentina
+	tabela = readtable('estacoes_coords.txt');
+
+switch app.PaisesDropDown.Value
+
+    case 'Brasil'
+        tabela_filtrada = tabela(1:129,:);
+
+        app.dadosRegiao.xlim = [-67 -36];
+        app.dadosRegiao.ylim = [-30 3];
+        app.dadosRegiao.shapefile = 'Brasil.shp';
+
+    case 'Argentina'
+        tabela_filtrada = tabela(130:end,:);
+
+        app.dadosRegiao.xlim = [-75 -50];
+        app.dadosRegiao.ylim = [-55 -20];
+        app.dadosRegiao.shapefile = 'Argentina.shp';
+end
+
+% Atualiza dados
+app.dadosRegiao.estacoes = tabela_filtrada.Sigla;
+app.dadosRegiao.lat = tabela_filtrada.Latitude;
+app.dadosRegiao.lon = tabela_filtrada.Longitude;
+
+% Reset
+app.EstacoesAtivas = app.dadosRegiao.estacoes;
+
+app.atualizarMapa();
+
+
+- quando o usuário escolher no dropdown argentina, precisa recortar o mapa para dar um close no país certo, e desativar as estações do brasil, só deixar ativa as da argentina, e vice versa, se o usuário escolher brasil, precisa desativar as estações da argentina
